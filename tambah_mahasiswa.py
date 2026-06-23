@@ -8,9 +8,10 @@ cursor.execute("DELETE FROM mahasiswa")
 
 # Daftar data mahasiswa baru
 # Format: (ID, NIM, Nama)
-# Catatan: NIM Anda berikan sama semua untuk ketiganya, jika ada typo silakan disesuaikan di file ini ya.
 data_mahasiswa = [
-    (1, '240658302004', 'Syifa Andini Aulia Putri'),
+    (1, '240658302003', 'Syifa Andini Aulia Putri'),
+    (2, '240658302006', 'Meishella Indihafsari'),
+    (3, '240658302004', 'Siska Yama Sari')
 ]
 
 # Masukkan data ke dalam tabel

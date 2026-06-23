@@ -48,8 +48,9 @@ while True:
             gray[y:y+h, x:x+w]
         )
 
-        # Jika confidence rendah (semakin rendah = semakin cocok)
-        if confidence < 70:
+        # Jika confidence rendah (semakin rendah = semakin cocok, 0 adalah sempurna)
+        # Kita longgarkan sedikit batasnya menjadi 85
+        if confidence < 85:
             
             # Ambil data mahasiswa dari database berdasarkan id wajah
             cursor.execute("SELECT nim, nama FROM mahasiswa WHERE id=?", (id,))
@@ -72,12 +73,12 @@ while True:
                     conn.commit()
                     print(f"Berhasil menyimpan absen untuk {nama} pada {jam_str}!")
 
-                text = nama
+                text = f"{nama} {round(100 - confidence)}%"
             else:
-                text = "Data tdk ada"
+                text = "Data tidak ada"
 
         else:
-            text = "Unknown"
+            text = f"Unknown {round(100 - confidence)}%"
 
         cv2.putText(
             img,

@@ -1,5 +1,6 @@
 import cv2
 import os
+import time
 
 # 1. Aktifkan Kamera utama (angka 0)
 kamera = cv2.VideoCapture(0)
@@ -12,6 +13,7 @@ student_id = input("Masukkan ID / NIM Mahasiswa (Angka saja): ")
 print("Kamera terbuka. Silakan melihat ke kamera...")
 
 hitung = 0
+waktu_terakhir = time.time()
 
 while True:
     # Ambil frame dari kamera
@@ -24,15 +26,19 @@ while True:
     daftar_wajah = deteksi_wajah.detectMultiScale(bukan_warna, scaleFactor=1.3, minNeighbors=5)
 
     for (x, y, w, h) in daftar_wajah:
-        hitung += 1
-        
-        # Potong gambar hanya di bagian wajah, lalu simpan ke folder 'dataset'
-        # Nama file: User.[ID_Mahasiswa].[Nomor_Foto].jpg
-        nama_file = f"dataset/User.{student_id}.{hitung}.jpg"
-        cv2.imwrite(nama_file, bukan_warna[y:y+h, x:x+w])
-        
         # Gambar kotak hijau di layar sebagai penanda wajah terdeteksi
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+        
+        # Simpan gambar setiap 0.2 detik (tidak bikin lag)
+        waktu_sekarang = time.time()
+        if waktu_sekarang - waktu_terakhir > 0.2:
+            hitung += 1
+            
+            # Potong gambar hanya di bagian wajah, lalu simpan ke folder 'dataset'
+            nama_file = f"dataset/User.{student_id}.{hitung}.jpg"
+            cv2.imwrite(nama_file, bukan_warna[y:y+h, x:x+w])
+            
+            waktu_terakhir = waktu_sekarang
 
     # Tampilkan video rekaman di layar komputer
     cv2.imshow('Proses Pengambilan Wajah', frame)
